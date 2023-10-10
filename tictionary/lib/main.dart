@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Tictionary',
       home: MyHomePage(),
     );
   }
@@ -25,105 +25,67 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  SpeechToText _speechToText = SpeechToText();
-  bool _speechEnabled = false;
-  String _lastWords = '';
+  List<String> sampleData = ["Translate", "Points of interest"];
 
-  @override
-  void initState() {
-    super.initState();
-    _initSpeech();
-  }
-
-  /// This has to happen only once per app
-  void _initSpeech() async {
-    _speechEnabled = await _speechToText.initialize();
-    setState(() {});
-  }
-
-  /// Each time to start a speech recognition session
-  void _startListening() async {
-    await _speechToText.listen(onResult: _onSpeechResult);
-    setState(() {});
-  }
-
-  /// Manually stop the active speech recognition session
-  /// Note that there are also timeouts that each platform enforces
-  /// and the SpeechToText plugin supports setting timeouts on the
-  /// listen method.
-  void _stopListening() async {
-    await _speechToText.stop();
-    setState(() {});
-  }
-
-  /// This is the callback that the SpeechToText plugin calls when
-  /// the platform returns recognized words.
-  void _onSpeechResult(SpeechRecognitionResult result) {
-    setState(() {
-      _lastWords = result.recognizedWords;
-    });
-  }
-
+  int _selectedIndex = -1;
   @override
   Widget build(BuildContext context) {
+    print("The length is");
+    print(sampleData.length);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Speech Demo'),
+        title: Text('Home Page'),
+        backgroundColor: Color.fromARGB(199, 157, 186, 157),
       ),
+      backgroundColor: Color.fromARGB(255, 227, 241, 227),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
+              height: 300,
+            child: Image.asset("assets/icon_tictionary.jpg",),),
+            Container(height: 50,),
+            Container(
               padding: EdgeInsets.all(16),
               child: Text(
-                'Recognized words:',
-                style: TextStyle(fontSize: 20.0),
+                'Tictionary presents with several functionalities click on the corresponding button for the same',
+                style: TextStyle(fontSize: 20.0,
+                    fontFamily: 'nunito',
+                    ),
+                    textAlign: TextAlign.center,
               ),
             ),
-            FutureBuilder(
-        future: operate(_lastWords),
-        builder: (BuildContext context,
-            AsyncSnapshot<String> snapshot) {
-          if (snapshot.connectionState == ConnectionState.none) {
-            return const Center(
-              child: Text('Error'),
-            );
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          String? text = snapshot.data;
-          return Text(text.toString());
-            }),
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.all(16),
-                child: Text(
-                  // If listening is active show the recognized words
-                  _speechToText.isListening
-                      ? '$_lastWords'
-                      // If listening isn't active but could be tell the user
-                      // how to start it, otherwise indicate that speech
-                      // recognition is not yet ready or not supported on
-                      // the target device
-                      : _speechEnabled
-                          ? 'Tap the microphone to start listening...'
-                          : 'Speech not available',
-                ),
+            Container(height: 30,),
+            SizedBox(
+              height: 100,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemCount: sampleData.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: EdgeInsets.fromLTRB(10, 0, 20, 30),
+                    child: TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Color.fromARGB(150,0, 100,  0),
+                          ),
+                          onPressed: () { },
+                      child: Container(
+                        height: 75,
+                        width: 150,
+                        
+                        child: Text(sampleData[index], style: TextStyle(fontSize: 17.0,
+                    fontFamily: 'nunito',color: Color.fromARGB(255, 8, 8, 8)),textAlign: TextAlign.center,),
+                    alignment: Alignment.center,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed:
-            // If not yet listening for speech start, otherwise stop
-            _speechToText.isNotListening ? _startListening : _stopListening,
-        tooltip: 'Listen',
-        child: Icon(_speechToText.isNotListening ? Icons.mic_off : Icons.mic),
       ),
     );
   }
