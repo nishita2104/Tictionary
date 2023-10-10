@@ -40,7 +40,6 @@ dependencies:
   highlight_text: ^0.7.2
   avatar_glow: ^1.2.0
   translator: ^0.1.7
-  modal_progress_hud: ^0.1.3
 
 dev_dependencies:
   flutter_test:
