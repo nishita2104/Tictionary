@@ -14,7 +14,7 @@ class TranslateToEnglish {
 Future<String> operate(String text) async {
   GoogleTranslator translator = GoogleTranslator();
   String rtn="";
-  await translator.translate(text, from: 'en', to: 'it').then((s) {
+  await translator.translate(text, from: 'fr', to: 'en').then((s) {
     rtn = s.text.toString();
   });
   return rtn;
