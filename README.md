@@ -1,0 +1,2 @@
+# Tictionary
+A travel dictionary
