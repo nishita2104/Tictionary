@@ -39,7 +39,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
                 textAlign: TextAlign.center,
               ),
               SizedBox(
-                height: 420,
+                height: 440,
                 child: Column(
                   children: [
                     Container(
