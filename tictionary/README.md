@@ -13,18 +13,18 @@ Tictionary, your very own travel dictionary!
 
 ## Steps to follow
 1. Clone the repository
-'''
+```
 git clone https://github.com/nishita2104/Tictionary.git
-'''
+```
 2. Get the dependencies
-'''
+```
 flutter pub get
-'''
+```
 3. Change the contents of SpeectToTextPlugin.kt using 
 4. Connect your android and run the app
-'''
+```
 flutter run --no-sound-null-safety
-'''
+```
 
 ## Getting Started with flutter
 
