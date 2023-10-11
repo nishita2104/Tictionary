@@ -1,8 +1,32 @@
-# tictionary
+# Tictionary
 
-A new Flutter project.
+Tictionary, your very own travel dictionary!
 
-## Getting Started
+## Features
+ - Translation: It translates your audio to desired language and displays the same in form of text
+ - Points of interest: It displays nearby restaurants, hotels, places to visit, etc using your current location
+
+## Future goals
+ - Estimated costs: depending on the places you would want to visit be it hotels, restaurants, tourism spots, etc. we aim to use ML model to implement the same
+ - Shopping complexes: suggested set of places for take home goodies for your loved ones 
+ - Currency conversion: visit to a new country shall not restrict the use of our app, currency conversion gives a better estimate!
+
+## Steps to follow
+1. Clone the repository
+'''
+git clone https://github.com/nishita2104/Tictionary.git
+'''
+2. Get the dependencies
+'''
+flutter pub get
+'''
+3. Change the contents of SpeectToTextPlugin.kt using 
+4. Connect your android and run the app
+'''
+flutter run --no-sound-null-safety
+'''
+
+## Getting Started with flutter
 
 This project is a starting point for a Flutter application.
 
