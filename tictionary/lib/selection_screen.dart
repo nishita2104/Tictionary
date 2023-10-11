@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tictionary/nearby/page.dart';
 import 'package:tictionary/translate/translate_page.dart';
 
 
@@ -94,7 +95,7 @@ class _SelectionScreenPageState extends State<SelectionScreenPage> {
                               index==0 ? MaterialPageRoute(
                                   builder: (context) => TranslatePage(),
                                       ): MaterialPageRoute(
-                                  builder: (context) => TranslatePage(),
+                                  builder: (context) => NearByApp(),
                                       ),
                             );
                           },

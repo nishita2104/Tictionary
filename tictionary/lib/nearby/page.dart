@@ -6,31 +6,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 
 String lat = "", long = "";
-void main() async {
-  await dotenv.load();
-  Amadeus amadeus = Amadeus();
-  LocationPermission permission = await Geolocator.requestPermission();
-  Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high);
-  final LocationSettings locationSettings = LocationSettings(
-    accuracy: LocationAccuracy.high,
-    distanceFilter: 100,
-  );
 
-  StreamSubscription<Position> positionStream =
-      Geolocator.getPositionStream(locationSettings: locationSettings)
-          .listen((Position? position) {});
-  lat = "41.39165";
-  long = "2.164772";
-
-  // print(data);
-
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  
-  const MyApp({super.key});
+class NearByApp extends StatelessWidget {
+  final String lat = "41.39165";
+  final String long = "2.164772";
+  const NearByApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -40,7 +20,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.green,
         ),
-        home: MyHomePage(title: 'Points of Interest'));
+        home: NearByPage(title: 'Points of Interest'));
   }
 }
 
@@ -54,25 +34,47 @@ class MyApp extends StatelessWidget {
 // }
 Map data = {};
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class NearByPage extends StatefulWidget {
+  @override
+  const NearByPage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<NearByPage> createState() => _NearByPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _NearByPageState extends State<NearByPage> {
+  Future <Map> getData() async {
+    await dotenv.load();
+    Amadeus amadeus = Amadeus();
+    LocationPermission permission = await Geolocator.requestPermission();
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    final LocationSettings locationSettings = LocationSettings(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 100,
+    );
+
+    StreamSubscription<Position> positionStream =
+        Geolocator.getPositionStream(locationSettings: locationSettings)
+            .listen((Position? position) {});
+    data = await Amadeus().getHotelOffers(
+                  "https://test.api.amadeus.com/v1/reference-data/locations/pois?latitude=41.39165&longitude=2.164772&radius=10>");
+    return data;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final String lat = "41.39165";
+    final String long = "2.164772";
     return Scaffold(
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'images/logo.jpg',
+              'assets/icon_tictionary.jpg',
               fit: BoxFit.contain,
               height: 32,
             ),
@@ -129,8 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
           // ),
           FutureBuilder(
-              future: Amadeus().getHotelOffers(
-                  "https://test.api.amadeus.com/v1/reference-data/locations/pois?latitude=$lat&longitude=$long&radius=10>"),
+              future: getData(),
               builder: (BuildContext context, AsyncSnapshot<Map> snapshot) {
                 if (snapshot.connectionState == ConnectionState.none) {
                   return const Center(
