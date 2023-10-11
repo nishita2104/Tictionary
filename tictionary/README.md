@@ -20,7 +20,21 @@ git clone https://github.com/nishita2104/Tictionary.git
 ```
 flutter pub get
 ```
-3. Change the contents of SpeectToTextPlugin.kt using 
+3. Change the contents of SpeectToTextPlugin.kt by placing
+override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,grantResults: IntArray)
+    : Boolean {
+        when (requestCode) {
+            speechToTextPermissionCode -> {
+                if (null != grantResults) {
+                    permissionToRecordAudio = grantResults.isNotEmpty() &&
+                            grantResults.get(0) == PackageManager.PERMISSION_GRANTED
+                }
+                completeInitialize()
+                return true
+            }
+        }
+        return false
+    } inside public class SpeechToTextPlugin and remove the same from other places
 4. Connect your android and run the app
 ```
 flutter run --no-sound-null-safety
