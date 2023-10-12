@@ -6,10 +6,29 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 
 String lat = "", long = "";
+Future<Map> getData() async {
+  await dotenv.load();
+  Amadeus amadeus = Amadeus();
+  LocationPermission permission = await Geolocator.requestPermission();
+  Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high);
+  final LocationSettings locationSettings = LocationSettings(
+    accuracy: LocationAccuracy.high,
+    distanceFilter: 100,
+  );
+
+  StreamSubscription<Position> positionStream =
+      Geolocator.getPositionStream(locationSettings: locationSettings)
+          .listen((Position? position) {});
+  lat = "41.39165";
+  long = "2.164772";
+  data = await Amadeus().getHotelOffers(
+          "https://test.api.amadeus.com/v1/reference-data/locations/pois?latitude=$lat&longitude=$long&radius=10>");
+  return data;
+  // print(data);
+}
 
 class NearByApp extends StatelessWidget {
-  final String lat = "41.39165";
-  final String long = "2.164772";
   const NearByApp({super.key});
 
   // This widget is the root of your application.
@@ -37,7 +56,6 @@ Map data = {};
 class NearByPage extends StatefulWidget {
   @override
   const NearByPage({super.key, required this.title});
-
   final String title;
 
   @override
@@ -45,25 +63,6 @@ class NearByPage extends StatefulWidget {
 }
 
 class _NearByPageState extends State<NearByPage> {
-  Future <Map> getData() async {
-    await dotenv.load();
-    Amadeus amadeus = Amadeus();
-    LocationPermission permission = await Geolocator.requestPermission();
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    final LocationSettings locationSettings = LocationSettings(
-      accuracy: LocationAccuracy.high,
-      distanceFilter: 100,
-    );
-
-    StreamSubscription<Position> positionStream =
-        Geolocator.getPositionStream(locationSettings: locationSettings)
-            .listen((Position? position) {});
-    data = await Amadeus().getHotelOffers(
-                  "https://test.api.amadeus.com/v1/reference-data/locations/pois?latitude=41.39165&longitude=2.164772&radius=10>");
-    return data;
-  }
-
   @override
   Widget build(BuildContext context) {
     final String lat = "41.39165";
@@ -130,9 +129,13 @@ class _NearByPageState extends State<NearByPage> {
           //   ),
 
           // ),
+
           FutureBuilder(
               future: getData(),
               builder: (BuildContext context, AsyncSnapshot<Map> snapshot) {
+                print("Hello");
+                print(snapshot);
+                print(snapshot.connectionState);
                 if (snapshot.connectionState == ConnectionState.none) {
                   return const Center(
                     child: Text('Error'),
